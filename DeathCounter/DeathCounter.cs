@@ -39,7 +39,7 @@ namespace DeathCounter
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.Counter = 0;
+            this.Counter = this.loadPreviousDeaths();
             this.lblCounter.Text = this.Counter.ToString();
             RegisterHotKey(this.Handle, 1, 0, (int)Keys.PageUp);
             RegisterHotKey(this.Handle, 2, 0, (int)Keys.PageDown);
@@ -85,6 +85,24 @@ namespace DeathCounter
                 }
             }
         }
+        private int loadPreviousDeaths()
+        {
+            int deaths = 0;
+            if (File.Exists(this.DeathCounterFile))
+            {
+                using (System.IO.StreamReader file = new System.IO.StreamReader(this.DeathCounterFile, false))
+                {
+                    string deathLine = file.ReadLine();
+                    if (!Int32.TryParse(deathLine, out deaths))
+                    {
+                        deaths = 0;
+                    }
+                    file.Close();
+                }
+            }
+            return deaths;
+        }
+
         protected override void WndProc(ref Message m)
         {
             if (m.Msg == 0x0312 && m.WParam.ToInt32() == PLUSHOTKEYID)
