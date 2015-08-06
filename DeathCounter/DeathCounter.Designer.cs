@@ -83,6 +83,7 @@
             this.Controls.Add(this.lblCounter);
             this.Name = "frmDeathCounter";
             this.Text = "Death Counter";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmDeathCounter_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -51,10 +51,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>15FB1B948DE73E67A14176799587F4911C9D5BA9</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>3A50E18D3F8DDBF4B6D3D711A64FFC0ADD7A570C</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>DeathCounter_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>

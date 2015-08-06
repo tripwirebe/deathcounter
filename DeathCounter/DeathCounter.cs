@@ -118,5 +118,10 @@ namespace DeathCounter
         public static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
         [DllImport("user32.dll")]
         public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+        private void frmDeathCounter_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            UnregisterHotKey(this.Handle, 1);
+            UnregisterHotKey(this.Handle, 2);
+        }
     }
 }
