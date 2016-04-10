@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using System.IO;
 using System.Runtime.InteropServices;
+using DeathCounter.Lib;
 
 namespace DeathCounter
 {
@@ -20,6 +21,7 @@ namespace DeathCounter
         const int PLUSHOTKEYID = 1;
         const int SUBHOTKEYID = 2;
         private string DeathCounterFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeathCounter\\Deaths.txt");
+        private IDeathInputOutHandler output;
         public int Counter
         {
             get { return counter; }
@@ -29,7 +31,7 @@ namespace DeathCounter
                 {
                     counter = value;
                     this.lblCounter.Text = this.Counter.ToString();
-                    this.UpdateDeaths(this.counter);
+                    this.output.UpdateDeaths(this.counter);
                 }
             }
         }
@@ -39,7 +41,9 @@ namespace DeathCounter
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.Counter = this.loadPreviousDeaths();
+            this.output = new DeathInputOutputFileHandler();
+            this.output.Init(APPLICATIONNAME, "deaths");
+            this.Counter = this.output.loadPreviousDeaths();
             this.lblCounter.Text = this.Counter.ToString();
             RegisterHotKey(this.Handle, 1, 0, (int)Keys.PageUp);
             RegisterHotKey(this.Handle, 2, 0, (int)Keys.PageDown);
@@ -55,52 +59,14 @@ namespace DeathCounter
         private void btnSet_Click(object sender, EventArgs e)
         {
             string counterSet = Interaction.InputBox("Inital value", "what is the inital value you would want to set?");
-            if (!int.TryParse(counterSet, out this.counter))
+            if (int.TryParse(counterSet, out this.counter))
             {
-                MessageBox.Show("Invalid value");
+                this.Counter = this.Counter;
             }
             else
             {
-                this.lblCounter.Text = this.Counter.ToString();
+                MessageBox.Show("Invalid value");
             }
-        }
-        private bool CreateAppdataFolder()
-        {
-            bool result = false;
-            if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), APPLICATIONNAME)))
-            {
-                Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), APPLICATIONNAME));
-            }
-            result = Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), APPLICATIONNAME));
-            return result;
-        }
-        private void UpdateDeaths(int numberOfDeaths)
-        {
-            if (CreateAppdataFolder())
-            {
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(this.DeathCounterFile, false))
-                {
-                    file.WriteLine(numberOfDeaths.ToString());
-                    file.Close();
-                }
-            }
-        }
-        private int loadPreviousDeaths()
-        {
-            int deaths = 0;
-            if (File.Exists(this.DeathCounterFile))
-            {
-                using (System.IO.StreamReader file = new System.IO.StreamReader(this.DeathCounterFile, false))
-                {
-                    string deathLine = file.ReadLine();
-                    if (!Int32.TryParse(deathLine, out deaths))
-                    {
-                        deaths = 0;
-                    }
-                    file.Close();
-                }
-            }
-            return deaths;
         }
         protected override void WndProc(ref Message m)
         {

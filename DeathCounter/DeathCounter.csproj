@@ -83,6 +83,8 @@
     <Compile Include="DeathCounter.Designer.cs">
       <DependentUpon>DeathCounter.cs</DependentUpon>
     </Compile>
+    <Compile Include="Lib\DeathInputOutputFileHandler.cs" />
+    <Compile Include="Lib\IDeathInputOutHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="DeathCounter.resx">
